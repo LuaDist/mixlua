@@ -1,0 +1,14 @@
+--- This file is part of LuaDist project
+
+name = "mixlua"
+version = "0.2.7"
+
+desc = "A preprocessor for files including embedded Lua code"
+author = "Thomas Lavergne"
+license = "MIT/X11"
+url = "http://oniros.org/projects.html"
+maintainer = "Peter Drahoš"
+
+depends = {
+	"lua ~> 5.1"
+}
