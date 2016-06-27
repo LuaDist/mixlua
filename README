@@ -2,16 +2,16 @@ README for Mixlua
 
 * What is Mixlua?
   ---------------
-  Mixlua is a library for Lua 5.1 who provide an onload preprocessor for lua
-  files and allow mixing of Lua code with other data.
-  It provide loadstring and loadfile function similar to Lua ones but with
-  aditional argument for specifing how the data element are recognized and
-  handled, and produce a regular lua compiled chunk with additional material
-  for handleing the data.
+  Mixlua is a library for Lua 5.1 that provides an onload preprocessor for Lua
+  files and allows for mixing of Lua code with other data.
+  It provides loadstring and loadfile functions similar to Lua ones but with an
+  additional argument for specifying how the data elements are recognized and
+  handled, and produces a regular Lua compiled chunk with additional materials
+  for handling the data.
 
 * Example of use:
   ---------------
-  Imagine an application who have a table like this one :
+  Imagine an application that has a table like this:
     infos = {
       {key = "foo", value = "dummy 1"},
       {key = "bar", value = "dummy 2"},
@@ -19,7 +19,7 @@ README for Mixlua
     }
 
   If you want to export it in various formats, you just have to build some
-  templates like this one for an xml output :
+  templates like this one for an xml output:
     <?xml version="1.0" />
     <infos>
       $[ for _, item in ipairs(infos) do ]$
@@ -27,39 +27,39 @@ README for Mixlua
       $[ end $]
     </infos>
 
-  If you load this file with :
+  If you load this file with:
     mix.loadfile("template.xml", "$[", "$]")
 
-  The xml file with all data will be printed on stdout. If you prefer to save
-  it elsewhere, there is no problems, just give an output function to mixlua
-  and it will be ok :
+  The xml file with all the data will be printed on stdout. If you prefer to 
+  save it elsewhere, no problem! Just give an output function to 
+  mixlua and it will work:
     function output(str) io.stderr:write(str) end)
     mix.loadfile("template.xml", "$[", "]$", nil, "ouput")
 
-  You can see Mixlua as something like the PHP preprocessor but in more
-  powerfull.
+  You can see Mixlua as something like the PHP preprocessor but more
+  powerful.
 
 * Usage:
   ------
   Mixlua expose only two function loadstring and loadfile. They work exactly
-  the same way, except for the first parameter who is a filename for loadfile
-  and a string for loadfile.
+  the same way, except for the first parameter which is a filename for loadfile
+  and a string for loadstring.
 
-  The next two parameters are two string who represent the tag used to surround
-  block of lua code embeded in the data, they must be given and must not be
-  empty.
+  The next two parameters are two strings that represent the tag used to 
+  surround block of Lua code embedded in the data, they must be passed and must 
+  not be empty.
 
-  The parameter four is a string who mark an expression statement instead of a
+  The fourth parameter is a string to mark an expression statement instead of a
   code statement. More on this a below. The default value is "=".
 
   And the last parameter is the name of the output function, by default
   "io.write". (this must be the name of the function, not the function itself
-  cause Mixlua is just a preprocessor who do texte transformation)
+  cause Mixlua is just a preprocessor that does text transformation)
 
-  When processed throught Mixlua, all data section are transformed into string
-  and given as the argument to the output function. Lua code are kept untouched
-  and lua expression are also given to the output function but untouched.
-  So, for example the example given before will be translated to :
+  When processed through Mixlua, all data section are transformed into strings
+  and given as the argument to the output function. Lua code remains untouched
+  and Lua expressions are also given to the output function but untouched.
+  So, for example the example given before will be translated to:
     io.write('<?xml version="1.0" />\
     <infos>\
       ') for _, item in ipairs(infos) do io.write('\
@@ -70,21 +70,21 @@ README for Mixlua
   And this is passed to the Lua compiler to produce a chunk of compiled code.
   The execution of this chunk will produce the output file.
 
-  In the preprocess, Mixlua escape data in a way that the line numbers are
-  kept unchanged so syntax error are reported correctly. And in the Lua
-  blocks, all string and comment for are skipped correctly so they can embed
+  In the preprocess, Mixlua escapes data in a way that the line numbers are
+  kept unchanged, so syntax errors are reported correctly. In the Lua
+  blocks, all string and comments are skipped correctly so they can embed
   the delimiter without any risk to corrupt the output.
 
 * Real case example:
   ------------------
-  For example the luapage loading of Cgilua by the Kepler Project can be donne
+  For example the luapage loading of Cgilua by the Kepler Project can be done
   easily using :
     mix.loadfile("filename", "<?lua", "?>", "=")
-  With the advantage that the "?>" closing tag can now appear in a lua string or
+  With the advantage that the "?>" closing tag can now appear in a Lua string or
   comment.
 
-  Another advantage is that after loading the page is now a complied lua chunk
-  that can be executed in different environement and so producing different
+  Another advantage is that after loading the page, the script is now a complied 
+  Lua chunk that can be executed in different environments and produce different 
   pages depending on the request.
-  This allow to implement easily a caching of the templates.
+  This can be used to implement caching for templates.
 
